@@ -1,0 +1,73 @@
+<html>
+  <script>
+
+    console.log("Janeiro");
+    salary1 = 3000;
+    rent1 = 1000;
+    electricityBill1 = 200;
+    waterBill1 = 100;
+    internetBill1 = 100;
+    transport1 = 300;
+    leisure1 = 300;
+    food1 = 500;
+
+    balance1 = salary1 - rent1 - electricityBill1 - waterBill1 - internetBill1 - transport1 - leisure1 - food1;
+
+    console.log( balance1 );
+    isNegative1 = balance1 < 0;
+
+    // balance = saldo
+    // fees = juros
+    // income = rendimento
+
+    if (isNegative1) {
+      console.log('Juros de janeiro');
+      fees1 = balance1 * 0.1;
+      balance1 = balance1 + fees1;
+      console.log(fees1);
+      console.log(balance1);
+    } else {
+      console.log('Rendimentos de janeiro');
+      income1 = balance1 * 0.005;
+      balance1 = balance1 + income1;
+      console.log(income1);
+      console.log(balance1);
+    }
+
+    console.log("Fevereiro");
+    salary2 = 3000;
+    rent2 = 1200;
+    electricityBill2 = 250;
+    waterBill2 = 100;
+    internetBill2 = 100;
+    transport2 = 500;
+    leisure2 = 0;
+    food2 = 1000;
+
+    balance2 = salary2 - rent2 - electricityBill2 - waterBill2 - internetBill2 - transport2 - leisure2 - food2;
+
+
+    console.log( balance2 );
+    isNegative2 = balance2 < 0;
+    
+    if (isNegative2) {
+      console.log('Juros de fevereiro');
+      fees2 = balance2 * 0.1;
+      balance2 = balance2 + fees2;
+      console.log(fees2);
+      console.log(balance2);
+    } else {
+      console.log('Rendimentos de fevereiro');
+      income2 = balance2 * 0.005;
+      balance2 = balance2 + income2;
+      console.log(income2);
+      console.log(balance2);
+    }
+
+    console.log("Total ano");
+    cumulativeYear = balance1 + balance2;
+
+    console.log( cumulativeYear );
+
+  </script>
+</html>

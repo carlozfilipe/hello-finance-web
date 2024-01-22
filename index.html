@@ -1,73 +1,101 @@
 <html>
   <script>
 
-    console.log("Janeiro");
+    // Função para arredondar
+    function round(value) {
+      return Math.round(value * 100) / 100;
+    }
+
+
+    // Função para calcular os juros
+    function calculateFees(value) {
+      return round(value * 0.1);
+    }
+
+    // Função para calcular o rendimento
+    function calculateIncome(value) {
+      return round(value * 0.005);
+    }
+
+    function calculateBalance(
+      month,
+      prevBalance,
+      salary,
+      rent,
+      waterBill,
+      electricityBill,
+      internetBill,
+      transport,
+      leisure,
+      food
+    ) {
+      console.log(month);
+      balance =
+        prevBalance +
+        salary -
+        rent -
+        waterBill -
+        electricityBill -
+        internetBill -
+        transport -
+        leisure -
+        food;
+      isNegative = balance < 0;
+
+      // balance = saldo
+      // fees = juros
+      // income = rendimento
+
+      if (isNegative) {
+        fees = calculateFees(balance);
+        balance = round(balance + fees);
+      } else {
+        income = calculateIncome(balance);
+        balance = round(balance + income);
+      }
+
+      return balance;
+    }
+
     salary1 = 3000;
     rent1 = 1000;
-    electricityBill1 = 200;
     waterBill1 = 100;
+    electricityBill1 = 200;
     internetBill1 = 100;
     transport1 = 300;
     leisure1 = 300;
     food1 = 500;
 
-    balance1 = salary1 - rent1 - electricityBill1 - waterBill1 - internetBill1 - transport1 - leisure1 - food1;
-
-    console.log( balance1 );
-    isNegative1 = balance1 < 0;
-
-    // balance = saldo
-    // fees = juros
-    // income = rendimento
-
-    if (isNegative1) {
-      console.log('Juros de janeiro');
-      fees1 = balance1 * 0.1;
-      balance1 = balance1 + fees1;
-      console.log(fees1);
-      console.log(balance1);
-    } else {
-      console.log('Rendimentos de janeiro');
-      income1 = balance1 * 0.005;
-      balance1 = balance1 + income1;
-      console.log(income1);
-      console.log(balance1);
-    }
-
-    console.log("Fevereiro");
+    balance1 = calculateBalance('Janeiro 2024', 0, salary1, rent1, waterBill1, electricityBill1, internetBill1, transport1, leisure1, food1);
+    console.log(balance1);
+    
     salary2 = 3000;
     rent2 = 1200;
-    electricityBill2 = 250;
     waterBill2 = 100;
+    electricityBill2 = 250;
     internetBill2 = 100;
     transport2 = 500;
     leisure2 = 0;
     food2 = 1000;
 
-    balance2 = salary2 - rent2 - electricityBill2 - waterBill2 - internetBill2 - transport2 - leisure2 - food2;
+    balance2 = calculateBalance('Fevereiro 2024', balance1, salary2, rent2, waterBill2, electricityBill2, internetBill2, transport2, leisure2, food2);
+    console.log(balance2);
 
+    salary3 = 4000;
+    rent3 = 1200;
+    waterBill3 = 200;
+    electricityBill3 = 100;
+    internetBill3 = 200;
+    transport3 = 500;
+    leisure3 = 800;
+    food3 = 1000;
 
-    console.log( balance2 );
-    isNegative2 = balance2 < 0;
-    
-    if (isNegative2) {
-      console.log('Juros de fevereiro');
-      fees2 = balance2 * 0.1;
-      balance2 = balance2 + fees2;
-      console.log(fees2);
-      console.log(balance2);
-    } else {
-      console.log('Rendimentos de fevereiro');
-      income2 = balance2 * 0.005;
-      balance2 = balance2 + income2;
-      console.log(income2);
-      console.log(balance2);
-    }
+    balance3 = calculateBalance('Março 2024', balance2, salary3, rent3, waterBill3, electricityBill3, internetBill3, transport3, leisure3, food3);
+    console.log(balance3);
 
-    console.log("Total ano");
-    cumulativeYear = balance1 + balance2;
+    console.log('Total ano');
+    cumulativeYear = balance3;
 
-    console.log( cumulativeYear );
-
+    console.log(cumulativeYear);
   </script>
 </html>

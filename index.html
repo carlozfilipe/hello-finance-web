@@ -6,7 +6,6 @@
       return Math.round(value * 100) / 100;
     }
 
-
     // Função para calcular os juros
     function calculateFees(value) {
       return round(value * 0.1);
@@ -17,29 +16,18 @@
       return round(value * 0.005);
     }
 
-    function calculateBalance(
-      month,
-      prevBalance,
-      salary,
-      rent,
-      waterBill,
-      electricityBill,
-      internetBill,
-      transport,
-      leisure,
-      food
-    ) {
+    function calculateBalance(month, prevBalance, releases) {
       console.log(month);
-      balance =
-        prevBalance +
-        salary -
-        rent -
-        waterBill -
-        electricityBill -
-        internetBill -
-        transport -
-        leisure -
-        food;
+
+      balance = prevBalance;
+      for (release of releases) {
+        if (release.type === 'receita') {
+          balance += release.value;
+        }
+        if (release.type === 'despesa') {
+          balance -= release.value;
+        }
+      }
       isNegative = balance < 0;
 
       // balance = saldo
@@ -57,45 +45,63 @@
       return balance;
     }
 
-    salary1 = 3000;
-    rent1 = 1000;
-    waterBill1 = 100;
-    electricityBill1 = 200;
-    internetBill1 = 100;
-    transport1 = 300;
-    leisure1 = 300;
-    food1 = 500;
+    openingBalance = 0;
 
-    balance1 = calculateBalance('Janeiro 2024', 0, salary1, rent1, waterBill1, electricityBill1, internetBill1, transport1, leisure1, food1);
+    januaryReleases = [
+      { category: 'Salário', type: 'receita', value: 3000 }, 
+      { category: 'Aluguel', type: 'despesa', value: 1000 }, 
+      { category: 'Conta de Luz', type: 'despesa', value: 100 }, 
+      { category: 'Conta de Água', type: 'despesa', value: 200 }, 
+      { category: 'Internet', type: 'despesa', value: 100 }, 
+      { category: 'Transporte', type: 'despesa', value: 300 }, 
+      { category: 'Lazer', type: 'despesa', value: 300 }, 
+      { category: 'Alimentação', type: 'despesa', value: 500 }, 
+      { category: 'Condomínio', type: 'despesa', value: 300 }, 
+      { category: 'Farmácia', type: 'despesa', value: 100 }
+    ];
+
+    balance1 = calculateBalance(
+      'Janeiro 2024',
+      openingBalance,
+      januaryReleases
+    );
     console.log(balance1);
-    
-    salary2 = 3000;
-    rent2 = 1200;
-    waterBill2 = 100;
-    electricityBill2 = 250;
-    internetBill2 = 100;
-    transport2 = 500;
-    leisure2 = 0;
-    food2 = 1000;
 
-    balance2 = calculateBalance('Fevereiro 2024', balance1, salary2, rent2, waterBill2, electricityBill2, internetBill2, transport2, leisure2, food2);
+    februaryReleases = [
+      { category: 'Salário', type: 'receita', value: 3000 },
+      { category: 'Aluguel', type: 'despesa', value: 1200 },
+      { category: 'Conta de Luz', type: 'despesa', value: 100 },
+      { category: 'Conta de Água', type: 'despesa', value: 250 },
+      { category: 'Internet', type: 'despesa', value: 100 },
+      { category: 'Transporte', type: 'despesa', value: 500 },
+      { category: 'Lazer', type: 'despesa', value: 0 },
+      { category: 'Alimentação', type: 'despesa', value: 1000 },
+      { category: 'Condomínio', type: 'despesa', value: 400 },
+      { category: 'Farmácia', type: 'despesa', value: 0 }
+    ];
+
+    balance2 = calculateBalance('Fevereiro 2024', balance1, februaryReleases);
     console.log(balance2);
 
-    salary3 = 4000;
-    rent3 = 1200;
-    waterBill3 = 200;
-    electricityBill3 = 100;
-    internetBill3 = 200;
-    transport3 = 500;
-    leisure3 = 800;
-    food3 = 1000;
+    marchReleases = [
+      { category: 'Salário', type: 'receita', value: 4000 },
+      { category: 'Aluguel', type: 'despesa', value: 1200 },
+      { category: 'Conta de Luz', type: 'despesa', value: 200 },
+      { category: 'Conta de Água', type: 'despesa', value: 100 },
+      { category: 'Internet', type: 'despesa', value: 200 },
+      { category: 'Transporte', type: 'despesa', value: 500 },
+      { category: 'Lazer', type: 'despesa', value: 800 },
+      { category: 'Alimentação', type: 'despesa', value: 1000 },
+      { category: 'Condomínio', type: 'despesa', value: 400 },
+      { category: 'Farmácia', type: 'despesa', value: 0 }
+    ];
 
-    balance3 = calculateBalance('Março 2024', balance2, salary3, rent3, waterBill3, electricityBill3, internetBill3, transport3, leisure3, food3);
+    balance3 = calculateBalance('Março 2024', balance2, marchReleases);
     console.log(balance3);
 
     console.log('Total ano');
     cumulativeYear = balance3;
-
     console.log(cumulativeYear);
+
   </script>
 </html>

@@ -1,5 +1,34 @@
 <html>
   <script>
+    class Release {
+      constructor(category, type, value) {
+        if (type !== 'receita' && type !== 'despesa') {
+          throw new Error(
+            'Lançamento Inválido: Tipo deve ser receita ou despesa.'
+          );
+        }
+
+        if (value <= 0) {
+          throw new Error(
+            'Lançamento Inválido: Valor deve ser maior que zero.'
+          );
+        }
+
+        if (category === '') {
+          throw new Error('Lançamento Inválido: A Categoria é obrigatória.');
+        }
+
+        this.category = category;
+        this.type = type;
+        this.value = value;
+      }
+    }
+
+    newRelease1 = new Release('salaŕio', 'receita', 4000);
+    newRelease2 = new Release('aluguel', 'despesa', 2500);
+
+    console.log(newRelease1);
+    console.log(newRelease2);
 
     // Função para arredondar
     function round(value) {
@@ -16,92 +45,131 @@
       return round(value * 0.005);
     }
 
+    // Distribuir despesas
+    function distributeExpenses(releases, total) {
+      expenseDistribution = [];
+      for (release of releases) {
+        if (release.type === 'despesa') {
+          percentage = round((release.value / total) * 100);
+          expenseDistribution.push({
+            category: release.category,
+            percentage,
+          });
+        }
+      }
+      return expenseDistribution;
+    }
+
     function calculateBalance(month, prevBalance, releases) {
       console.log(month);
 
-      balance = prevBalance;
-      for (release of releases) {
-        if (release.type === 'receita') {
-          balance += release.value;
-        }
-        if (release.type === 'despesa') {
-          balance -= release.value;
-        }
-      }
-      isNegative = balance < 0;
-
       // balance = saldo
+      // revenue = receita
+      // expense = despesa
       // fees = juros
       // income = rendimento
 
-      if (isNegative) {
-        fees = calculateFees(balance);
-        balance = round(balance + fees);
-      } else {
-        income = calculateIncome(balance);
-        balance = round(balance + income);
+      monthlyTotalizer = {
+        balance: 0,
+        prevBalance,
+        fees: 0,
+        income: 0,
+        revenue: 0,
+        expense: 0,
+        expenseDistribution: [],
+      };
+      monthlyTotalizer.balance = prevBalance;
+
+      for (release of releases) {
+        if (release.type === 'receita') {
+          monthlyTotalizer.balance += release.value;
+          monthlyTotalizer.revenue += release.value;
+        }
+        if (release.type === 'despesa') {
+          monthlyTotalizer.balance -= release.value;
+          monthlyTotalizer.expense += release.value;
+        }
       }
 
-      return balance;
+      monthlyTotalizer.expenseDistribution = distributeExpenses(releases, monthlyTotalizer.expense);
+
+      isNegative = monthlyTotalizer.balance < 0;
+      if (isNegative) {
+        monthlyTotalizer.fees = calculateFees(monthlyTotalizer.balance);
+        monthlyTotalizer.balance = round(
+          monthlyTotalizer.balance + monthlyTotalizer.fees
+        );
+      } else {
+        monthlyTotalizer.income = calculateIncome(monthlyTotalizer.balance);
+        monthlyTotalizer.balance = round(
+          monthlyTotalizer.balance + monthlyTotalizer.income
+        );
+      }
+
+      return monthlyTotalizer;
     }
 
     openingBalance = 0;
 
     januaryReleases = [
-      { category: 'Salário', type: 'receita', value: 3000 }, 
-      { category: 'Aluguel', type: 'despesa', value: 1000 }, 
-      { category: 'Conta de Luz', type: 'despesa', value: 100 }, 
-      { category: 'Conta de Água', type: 'despesa', value: 200 }, 
-      { category: 'Internet', type: 'despesa', value: 100 }, 
-      { category: 'Transporte', type: 'despesa', value: 300 }, 
-      { category: 'Lazer', type: 'despesa', value: 300 }, 
-      { category: 'Alimentação', type: 'despesa', value: 500 }, 
-      { category: 'Condomínio', type: 'despesa', value: 300 }, 
-      { category: 'Farmácia', type: 'despesa', value: 100 }
+      new Release('Salário', 'receita', 3000),
+      new Release('Aluguel', 'despesa', 1000),
+      new Release('Conta de Luz', 'despesa', 100),
+      new Release('Conta de Água', 'despesa', 200),
+      new Release('Internet', 'despesa', 100),
+      new Release('Transporte', 'despesa', 300),
+      new Release('Lazer', 'despesa', 300),
+      new Release('Alimentação', 'despesa', 500),
+      new Release('Condomínio', 'despesa', 300),
+      new Release('Farmácia', 'despesa', 100),
     ];
 
-    balance1 = calculateBalance(
+    monthlyTotalizer1 = calculateBalance(
       'Janeiro 2024',
       openingBalance,
       januaryReleases
     );
-    console.log(balance1);
+    console.log(monthlyTotalizer1);
 
     februaryReleases = [
-      { category: 'Salário', type: 'receita', value: 3000 },
-      { category: 'Aluguel', type: 'despesa', value: 1200 },
-      { category: 'Conta de Luz', type: 'despesa', value: 100 },
-      { category: 'Conta de Água', type: 'despesa', value: 250 },
-      { category: 'Internet', type: 'despesa', value: 100 },
-      { category: 'Transporte', type: 'despesa', value: 500 },
-      { category: 'Lazer', type: 'despesa', value: 0 },
-      { category: 'Alimentação', type: 'despesa', value: 1000 },
-      { category: 'Condomínio', type: 'despesa', value: 400 },
-      { category: 'Farmácia', type: 'despesa', value: 0 }
+      new Release('Salário', 'receita', 3000),
+      new Release('Aluguel', 'despesa', 1200),
+      new Release('Conta de Luz', 'despesa', 250),
+      new Release('Conta de Água', 'despesa', 100),
+      new Release('Internet', 'despesa', 100),
+      new Release('Transporte', 'despesa', 500),
+      new Release('Alimentação', 'despesa', 1000),
+      new Release('Condomínio', 'despesa', 400),
     ];
 
-    balance2 = calculateBalance('Fevereiro 2024', balance1, februaryReleases);
-    console.log(balance2);
+    monthlyTotalizer2 = calculateBalance(
+      'Fevereiro 2024',
+      monthlyTotalizer1.balance,
+      februaryReleases
+    );
+    console.log(monthlyTotalizer2);
 
     marchReleases = [
-      { category: 'Salário', type: 'receita', value: 4000 },
-      { category: 'Aluguel', type: 'despesa', value: 1200 },
-      { category: 'Conta de Luz', type: 'despesa', value: 200 },
-      { category: 'Conta de Água', type: 'despesa', value: 100 },
-      { category: 'Internet', type: 'despesa', value: 200 },
-      { category: 'Transporte', type: 'despesa', value: 500 },
-      { category: 'Lazer', type: 'despesa', value: 800 },
-      { category: 'Alimentação', type: 'despesa', value: 1000 },
-      { category: 'Condomínio', type: 'despesa', value: 400 },
-      { category: 'Farmácia', type: 'despesa', value: 0 }
+      new Release('Salário', 'receita', 4000),
+      new Release('Aluguel', 'despesa', 1200),
+      new Release('Conta de Luz', 'despesa', 200),
+      new Release('Conta de Água', 'despesa', 100),
+      new Release('Internet', 'despesa', 200),
+      new Release('Transporte', 'despesa', 500),
+      new Release('Lazer', 'despesa', 800),
+      new Release('Alimentação', 'despesa', 1000),
+      new Release('Condomínio', 'despesa', 400),
     ];
 
-    balance3 = calculateBalance('Março 2024', balance2, marchReleases);
+    balance3 = calculateBalance(
+      'Março 2024',
+      monthlyTotalizer2.balance,
+      marchReleases
+    );
     console.log(balance3);
 
     console.log('Total ano');
     cumulativeYear = balance3;
     console.log(cumulativeYear);
-
   </script>
 </html>
